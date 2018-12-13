@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8" />
+    <link href="mainpage_stylesheet.css" rel="stylesheet"
+ 	  type="text/css" />
+    <style>
+	table, th, td {
+	    border: 1px solid black;
+	}
+ 
+	    table.MsoTableGrid {
+ 		border: solid windowtext 1.0pt;
+ 		font-size: 11.0pt;
+ 		font-family: "Calibri",sans-serif;
+ 	    }
+ 	p.MsoNormal {
+ 	    margin-top: 0cm;
+	    margin-right: 0cm;
+ 	    margin-bottom: 8.0pt;
+ 	    margin-left: 0cm;
+ 	    line-height: 107%;
+ 	    font-size: 11.0pt;
+ 	    font-family: "Calibri",sans-serif;
+ 	}
+	.auto-style1 {
+ 	    width: 406px;
+ 	}
+    </style>
+    
+    <title>My Modules</title>
+<?php
+$mod_name = $_POST['Module_name'];
+$mod_id = $_POST['Module_ID'];
+$stu_id = $_POST['Student_ID'];
+$stu_name = $_POST['Name'];
+?>
+</head>
+<body>
+
+<?php
+$servername = "mersey.cs.nott.ac.uk";
+$username = "mbyst4";
+$password = "EVerT0n1997";
+$dbname = "mbyst4_stu_db";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+echo "Connected successfully";
+}
+
+$stu_id = $_POST['stu_id']
+
+
+$sql = "SELECT * FROM Student where Student_ID ='".$stu_id."'";
+$result = $conn->query($sql);   
+
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        echo "Name: " . $row["Name"]. "<br>";
+        echo "ID: " . $row["Student_ID"]. "<br>";
+        echo "Year: " . $row["Year_of_study"]. "<br>";
+   }
+else {
+  echo "No results";
+
+}
+
+?>
+
+<div class="header">
+  <div class="text">My Modules</div><div class="image"><img src="logo_transparent.png" height="200" width="200"></div> 
+</div>
+
+<div class="topnav">
+  <a class="active" href="student_homepage.html"><i class="fas fa-home"></i> Home</a>
+  
+  <div class="dropdown">
+    <a class="dropbtn"><i class="fas fa-chalkboard"></i> My Teaching
+      <i class="fas fa-caret-down"></i></a> 
+    <div class="dropdown-content">
+        <a href="#my modules">My Modules</a>
+        <a href="#">My Module Enrollment</a>
+        <a href="#">My Lecturers</a>
+        <a href"#">My Timetable</a>
+    </div>
+  </div>
+  
+  <div class="dropdown">
+    <a class="dropbtn"><i class="fas fa-graduation-cap"></i> My Degree Progress
+      <i class="fas fa-caret-down"></i></a>
+    <div class="dropdown-content">
+        <a href="#">My Grades</a>
+        <a href="#">My Degree Award</a>
+        <a href="#">My Assessments</a> 
+    </div>
+  </div>
+  
+  <div class="dropdown">   
+    <a class="dropbtn"><i class="fas fa-user"></i> My Detail
+      <i class="fas fa-caret-down"></i></a>
+    <div class="dropdown-content">
+      <a <?php echo "Name: " . $row["Name"]. ?>;</a>
+      <a <?php echo "ID: " . $row["Student_ID"]. ?>;</a>
+      <a <?php echo "Year: " . $row["Year_of_study"]. ?>";</a>
+    </div>
+  </div>
+  
+  <button id="logout"><a href="logout.php">Log Out</a></button>
+</div>
+
+
+<div class="topnav">
+  <button class="openbtn" onclick="openNav()">☰ Toggle Sidepanel</button> 
+    <div class id="SidePanel" class="sidepanel">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="https://email.nottingham.ac.uk/">University email</a>
+      <a href="https://nusearch.nottingham.ac.uk/">NUSearch</a>
+      <a href="https://www.nottingham.ac.uk/contact/useful-contacts.aspx">Useful Contacts</a>
+      <a href="https://www.nottingham.ac.uk/academicservices/staffinformation/curriculum-management/catalogue-links.aspx">Module Catalogues</a>
+    </div>
+</div>
+
+<?php
+
+$sql2 = "SELECT * FROM Enrollment where Student_ID ='".$stu_id."'";
+$result2 = $conn->query($sql2);
+
+if ($result2-> > 0) {
+   
+   while($row = $result2->fetch_assoc()) {
+       $mod_id = $row["Module_ID"];
+   }
+else {
+  echo "No results" 
+
+}
+?>
+
+<?php
+
+$sql3 = "SELECT * FROM Module where Module_ID = '".$mod_id."'";
+$result3 = $conn->query($sql3);
+
+if ($result3-> > 0) {
+   
+   while($row = $result3->fetch_assoc()) {
+       $mod_name = $row["Module_name"];
+   }
+else {
+  echo "No results"
+
+} 
+?>
+
+<table>
+    <tr>
+	<td>
+	    <form action="student_homepage.html" method="post">
+		<table>
+		    <tr>
+			<th colspan="4">First Row of Inner Table</th>
+		    </tr>
+		    <tr>
+			<th>Name</th>
+			<th>Student ID</th>
+			<th>Module Name ID</th>
+			<th>Module Name</th>
+		    </tr>
+ 		    <tr>
+ 			<td><p><?php echo $row["Name"]; ?></p></td>
+ 			<td><p><?php echo $stu_id; ?></p></td>
+ 			<td><p><?php echo $mod_id; ?></p></td>
+			<td><p><?php echo $mod_name; ?></p></td>
+ 		    </tr>
+		    <tr>
+ 			<td colspan="4"><input type="submit" value= "Return To Page"/></td>
+ 		    </tr>
+ 		</table>
+ 	    </form>
+ 	</td>
+    </tr>
+</table>
+</body>
+</html>
